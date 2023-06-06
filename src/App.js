@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { createNote, deleteNote, updateNote, fetchNotes } from "./redux/noteSlice";
 import { useEffect } from "react";
+import Navbar from "./components/Navbar";
 
 function App() {
   const notes = useSelector((state) => state.note.notes);
@@ -14,6 +15,10 @@ function App() {
     content: "",
   });
   const dispatch = useDispatch();
+
+  const translationStatus = useSelector(
+    (state) => state.note.translationStatus
+  );
 
   useEffect(() => {
     dispatch(fetchNotes());
@@ -97,10 +102,11 @@ function App() {
 
   return (
     <Container>
+      <Navbar setModalOpen={setModalOpen} />
       <Cards>
-        <AddNewNote onClick={() => setModalOpen(true)}>
+        {/* <AddNewNote onClick={() => setModalOpen(true)}>
           <p>+</p>
-        </AddNewNote>
+        </AddNewNote> */}
         {notes.map((note) => (
           <NoteCard key={note._id} style={{ backgroundColor: getRandomColor() }}>
             <h2>{note.title}</h2>
@@ -153,6 +159,11 @@ function App() {
           </div>
         </Modal>
       )}
+      {
+        translationStatus=="loading" && <LoadingScreen>
+          <h1>Loading...</h1>
+        </LoadingScreen>
+      }
     </Container>
   );
 }
@@ -344,6 +355,25 @@ const NoteCard = styled.div`
   p {
     /* background-color: aqua; */
   }
+`;
+
+const LoadingScreen = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  backdrop-filter: blur(5px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  h1{
+    font-size: 2rem;
+    font-weight: 400;
+  }
+
 `;
 
 export default App;
