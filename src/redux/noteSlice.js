@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3002/api';
+const API_BASE_URL = 'https://notes-app-server-cr5j5yn2ca-uc.a.run.app/api';
 
 export const fetchNotes = createAsyncThunk('notes/fetchNotes', async () => {
   const response = await axios.get(`${API_BASE_URL}/notes`);
