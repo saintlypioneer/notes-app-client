@@ -63,8 +63,36 @@ function App() {
     };
 
     dispatch(updateNote(updatedNoteObj));
-    // console.log(updatedNoteObj);
     setUpdatingModalOpen(false);
+  }
+
+  // Helper function to generate a random background color
+  function getRandomColor() {
+    const colors = [
+      "rgba(244, 67, 54, 0.15)",
+      "rgba(233, 30, 99, 0.15)",
+      "rgba(156, 39, 176, 0.15)",
+      "rgba(103, 58, 183, 0.15)",
+      "rgba(63, 81, 181, 0.15)",
+      "rgba(33, 150, 243, 0.15)",
+      "rgba(3, 169, 244, 0.15)",
+      "rgba(0, 188, 212, 0.15)",
+      "rgba(0, 150, 136, 0.15)",
+      "rgba(76, 175, 80, 0.15)",
+      "rgba(139, 195, 74, 0.15)",
+      "rgba(205, 220, 57, 0.15)",
+      "rgba(255, 235, 59, 0.15)",
+      "rgba(255, 193, 7, 0.15)",
+      "rgba(255, 152, 0, 0.15)",
+      "rgba(255, 87, 34, 0.15)",
+      "rgba(121, 85, 72, 0.15)",
+      "rgba(158, 158, 158, 0.15)",
+      "rgba(96, 125, 139, 0.15)",
+      "rgba(0, 0, 0, 0.15)"
+    ];
+    
+    const randomIndex = Math.floor(Math.random() * colors.length);
+    return colors[randomIndex];
   }
 
   return (
@@ -74,12 +102,12 @@ function App() {
           <p>+</p>
         </AddNewNote>
         {notes.map((note) => (
-          <NoteCard key={note._id}>
+          <NoteCard key={note._id} style={{ backgroundColor: getRandomColor() }}>
             <h2>{note.title}</h2>
             <p>{note.content}</p>
             <div id="overlay">
               <div>
-                <button onClick={() => editNote(note)} >Edit</button>
+                <button onClick={() => editNote(note)}>Edit</button>
                 <button onClick={() => deleteSpecificNote(note._id)}>Delete</button>
               </div>
             </div>
@@ -108,8 +136,17 @@ function App() {
             <div>
               <h2>Update Note</h2>
               <form onSubmit={(e) => updateCurrentNote(e)}>
-                <input type="text" placeholder="Title" value={currentNote.title} onChange={e => setCurrentNote({...currentNote, title: e.target.value})} />
-                <textarea placeholder="Content" value={currentNote.content} onChange={e => setCurrentNote({...currentNote, content: e.target.value})} />
+                <input
+                  type="text"
+                  placeholder="Title"
+                  value={currentNote.title}
+                  onChange={(e) => setCurrentNote({ ...currentNote, title: e.target.value })}
+                />
+                <textarea
+                  placeholder="Content"
+                  value={currentNote.content}
+                  onChange={(e) => setCurrentNote({ ...currentNote, content: e.target.value })}
+                />
                 <button type="submit">Update</button>
               </form>
             </div>
@@ -194,6 +231,7 @@ const Container = styled.div`
   height: 100vh;
   background-color: #ededed;
   padding: 20px;
+  overflow-y: scroll;
 `;
 
 const Cards = styled.div`
@@ -215,7 +253,7 @@ const AddNewNote = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 20px;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
 
   p {
     padding: 20px;
@@ -231,13 +269,13 @@ const NoteCard = styled.div`
   min-width: 250px;
   max-width: 350px;
   height: 250px;
-  padding: 0;
   align-items: center;
   border-radius: 20px;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  padding: 10px;
+  padding: 20px;
   transition: all 0.3s ease-in-out;
   position: relative;
+  overflow-y: scroll;
 
   &:hover {
     #overlay {
