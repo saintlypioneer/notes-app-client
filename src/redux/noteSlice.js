@@ -13,13 +13,17 @@ export const fetchNotes = createAsyncThunk('notes/fetchNotes', async (_, thunkAP
   return response.data;
 });
 
-export const createNote = createAsyncThunk('notes/createNote', async (note, thunkAPI) => {
+export const createNote = createAsyncThunk('notes/createNote', async (formData, thunkAPI) => {
   const token = thunkAPI.getState().auth.token;
-  const response = await axios.post(`${API_BASE_URL}/api/notes`, note, {
+
+  const config = {
     headers: {
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'multipart/form-data'
     }
-  });
+  };
+
+  const response = await axios.post(`${API_BASE_URL}/api/notes`, formData, config);
   return response.data;
 });
 

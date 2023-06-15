@@ -1,15 +1,50 @@
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { createNote } from "../../redux/noteSlice";
 
 function CreateNoteModal({setModalOpen, addNewNote}) {
+
+  const dispatch = useDispatch();
+
+  function addNewNote(e) {
+    e.preventDefault();
+
+    const title = e.target.elements.title.value;
+    const content = e.target.elements.content.value;
+    const file = e.target.elements.file.files[0];
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('content', content);
+
+    if (file) {
+        formData.append('mediaFile', file);
+        formData.append('mediaType', file.type.split('/')[0]); // 'pdf', 'audio', 'video'...
+    }
+
+    dispatch(createNote(formData));
+    setModalOpen(false);
+
+    e.target.elements.title.value = "";
+    e.target.elements.content.value = "";
+    e.target.elements.file.value = "";
+}
+
+const handleSubmit = e => {
+  e.preventDefault();
+  addNewNote(e);
+};
+
   return (
     <Modal>
       <div id="modal__content">
         <CloseButton onClick={() => setModalOpen(false)}>X</CloseButton>
         <div>
           <h2>Add New Note</h2>
-          <form onSubmit={(e) => addNewNote(e)}>
-            <input type="text" placeholder="Title" />
-            <textarea placeholder="Content" />
+          <form onSubmit={handleSubmit}>
+            <input type="text" placeholder="Title" name="title" />
+            <textarea placeholder="Content" name="content" />
+            <input type="file" name="file" />
             <button type="submit">Add Note</button>
           </form>
         </div>

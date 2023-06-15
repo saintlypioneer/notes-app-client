@@ -37,18 +37,24 @@ function App() {
 
     const title = e.target.elements[0].value;
     const content = e.target.elements[1].value;
+    const file = e.target.elements[2].files[0];
 
-    const newNote = {
-      title,
-      content,
-    };
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('content', content);
 
-    dispatch(createNote(newNote));
+    if (file) {
+      formData.append('mediaFile', file);
+      formData.append('mediaType', file.type.split('/')[0]); // 'pdf', 'audio', 'video'...
+    }
+
+    dispatch(createNote(formData));
     setModalOpen(false);
 
     e.target.elements[0].value = "";
     e.target.elements[1].value = "";
-  }
+    e.target.elements[2].value = "";
+}
 
   function updateCurrentNote(e) {
     e.preventDefault();

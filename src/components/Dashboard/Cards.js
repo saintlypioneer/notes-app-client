@@ -105,12 +105,21 @@ function Cards({
     return sharedInfo && sharedInfo.permission === "write";
   };
 
+  const openMediaFile = (note) => {
+    console.log(note);
+    const url = note.mediaFile.url;
+    window.open(url, "_blank");
+  }
+
   return (
     <Container>
       {data.map((note) => (
         <NoteCard key={note._id} style={{ backgroundColor: getRandomColor() }}>
           <h2>{note.title}</h2>
           <p>{note.content}</p>
+          {
+            note.mediaFile && <button className="mediaFile__type">{note.mediaFile.type}</button>
+          }
           <div id="overlay">
             <div>
               {dataFilter !== "shared-with-me" || hasWritePermission(note, token) ? (
@@ -118,6 +127,7 @@ function Cards({
               ) : null}
               <button onClick={() => deleteSpecificNote(note._id)}>Delete</button>
               <button onClick={() => shareNote(note)}>Share</button>
+              <button onClick={() => openMediaFile(note)}>File</button>
             </div>
           </div>
         </NoteCard>
@@ -151,6 +161,18 @@ const NoteCard = styled.div`
   transition: all 0.3s ease-in-out;
   position: relative;
   overflow-y: scroll;
+
+  &>.mediaFile__type {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: black;
+    color: white;
+    /* z-index: 10; */
+  }
 
   &:hover {
     #overlay {
